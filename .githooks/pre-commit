@@ -1,0 +1,17 @@
+#!/bin/sh
+# Pre-commit hook that runs Biome checks
+
+echo "🔍 Running Biome checks before commit..."
+
+# Run Biome check on staged files
+npm run check
+
+# Check exit status
+if [ $? -ne 0 ]; then
+    echo "❌ Biome checks failed! Please fix the issues before committing."
+    echo "💡 Run 'npm run check:fix' to automatically fix some issues."
+    exit 1
+fi
+
+echo "✅ Biome checks passed!"
+exit 0
