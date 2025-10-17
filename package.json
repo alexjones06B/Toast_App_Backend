@@ -3,22 +3,31 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:remote": "wrangler dev --remote",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
-    "lint": "biome lint ./src",
-    "lint:fix": "biome lint --write ./src",
-    "format": "biome format ./src",
-    "format:fix": "biome format --write ./src",
-    "check": "biome check ./src",
-    "check:fix": "biome check --write ./src",
-    "biome:ci": "biome ci ./src"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply toast --local",
+    "db:migrate:prod": "wrangler d1 migrations apply toast",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "wrangler d1 execute toast --local --file=src/scripts/seed.sql",
+    "db:clear": "wrangler d1 execute toast --local --file=src/scripts/clear.sql",
+    "check": "biome check .",
+    "check:fix": "biome check . --write",
+    "lint": "biome lint .",
+    "format": "biome format .",
+    "format:fix": "biome format . --write",
+    "biome:ci": "biome ci ."
   },
   "dependencies": {
+    "@cloudflare/workers-types": "^4.20251011.0",
+    "drizzle-kit": "^0.31.5",
+    "drizzle-orm": "^0.44.6",
     "hono": "^4.10.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.6",
-    "@cloudflare/workers-types": "^4.20251011.0",
+    "@biomejs/biome": "2.2.6",
+    "@types/node": "^24.8.1",
     "wrangler": "^4.4.0"
   }
 }

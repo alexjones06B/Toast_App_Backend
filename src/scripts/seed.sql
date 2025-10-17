@@ -1,0 +1,13 @@
+-- Seed sample users
+INSERT OR IGNORE INTO users (userID, name) VALUES 
+  ('550e8400-e29b-41d4-a716-446655440001', 'Alice Johnson'),
+  ('550e8400-e29b-41d4-a716-446655440002', 'Bob Smith'),
+  ('550e8400-e29b-41d4-a716-446655440003', 'Charlie Brown'),
+  ('550e8400-e29b-41d4-a716-446655440004', 'Diana Prince');
+
+-- Seed sample toasts
+INSERT OR IGNORE INTO toasts (toastID, toasterID, toastieID, toastTime) VALUES 
+  ('650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440002', datetime('now')),
+  ('650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440003', datetime('now')),
+  ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', datetime('now')),
+  ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440001', datetime('now'));

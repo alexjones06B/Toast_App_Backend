@@ -1,0 +1,108 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "642c6f8e-586c-4552-aa48-a8b23102cb85",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "toasts": {
+      "name": "toasts",
+      "columns": {
+        "toastID": {
+          "name": "toastID",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "toasterID": {
+          "name": "toasterID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "toastieID": {
+          "name": "toastieID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "toastTime": {
+          "name": "toastTime",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "toasts_toasterID_users_userID_fk": {
+          "name": "toasts_toasterID_users_userID_fk",
+          "tableFrom": "toasts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "toasterID"
+          ],
+          "columnsTo": [
+            "userID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "toasts_toastieID_users_userID_fk": {
+          "name": "toasts_toastieID_users_userID_fk",
+          "tableFrom": "toasts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "toastieID"
+          ],
+          "columnsTo": [
+            "userID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "userID": {
+          "name": "userID",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

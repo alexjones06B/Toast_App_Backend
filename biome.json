@@ -58,6 +58,7 @@
     }
   },
   "files": {
-    "includes": ["src/**/*", "*.ts", "*.js", "*.json"]
+    "includes": ["src/**/*", "*.ts", "*.js", "*.json"],
+    "ignoreUnknown": true
   }
 }
