@@ -11,7 +11,9 @@
     "db:migrate:prod": "wrangler d1 migrations apply toast",
     "db:studio": "drizzle-kit studio",
     "db:seed": "wrangler d1 execute toast --local --file=src/scripts/seed.sql",
-    "db:clear": "wrangler d1 execute toast --local --file=src/scripts/clear.sql"
+    "db:clear": "wrangler d1 execute toast --local --file=src/scripts/clear.sql",
+    "check": "biome check .",
+    "check:fix": "biome check . --write"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20251011.0",
@@ -20,6 +22,7 @@
     "hono": "^4.10.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.6",
     "@types/node": "^24.8.1",
     "wrangler": "^4.4.0"
   }
