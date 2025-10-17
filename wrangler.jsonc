@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "toast-app-backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-04-18",
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "toast",
+      "database_id": "8cbde640-7a43-4760-9c14-dd3145c402c1"
+    }
+  ]
+}
