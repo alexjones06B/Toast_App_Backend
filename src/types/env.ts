@@ -3,6 +3,9 @@ export interface Env {
   // D1 Database binding (will be available once configured)
   DB: D1Database;
   
-  // Add other environment variables here
+  // Environment variables
   NODE_ENV?: string;
+  CLOUDFLARE_API_TOKEN: string;
+  CLOUDFLARE_DATABASE_ID: string;
+  CLOUDFLARE_DATABASE_NAME: string;
 }
