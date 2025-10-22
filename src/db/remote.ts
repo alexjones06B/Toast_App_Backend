@@ -22,7 +22,7 @@ interface D1Response {
 /**
  * Create a remote D1 database connection helper
  * This provides typed access to your D1 database via the REST API
- * 
+ *
  * @example
  * ```ts
  * const db = createRemoteDB(
@@ -30,15 +30,11 @@ interface D1Response {
  *   process.env.CLOUDFLARE_ACCOUNT_ID!,
  *   process.env.CLOUDFLARE_DATABASE_ID!
  * );
- * 
+ *
  * const users = await db.query("SELECT * FROM users");
  * ```
  */
-export function createRemoteDB(
-  apiToken: string,
-  accountId: string,
-  databaseId: string
-) {
+export function createRemoteDB(apiToken: string, accountId: string, databaseId: string) {
   return {
     async query<T = Record<string, unknown>>(sql: string, params: unknown[] = []): Promise<T[]> {
       return queryRemoteDB(sql, apiToken, accountId, databaseId, params) as Promise<T[]>;
@@ -63,7 +59,7 @@ export async function queryRemoteDB(
     const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${databaseId}/query`;
     const payload = {
       sql,
-      ...(params.length > 0 && { params })
+      ...(params.length > 0 && { params }),
     };
 
     console.log(`Making request to: ${url}`);
@@ -109,5 +105,3 @@ export async function queryRemoteDB(
 }
 
 export type RemoteDB = ReturnType<typeof createRemoteDB>;
-
-
