@@ -1,111 +1,66 @@
 # Toast App Backend
 
-A Cloudflare Workers-based backend API for the Toast App, built with Hono framework and D1 database.
+A Cloudflare Workers backend API for sending "toasts" to other users, built with Hono and D1.
 
 ## 🚀 Quick Start
-
-**New to D1 setup?** Check out:
-- **[QUICK_START.md](./QUICK_START.md)** - Get up and running in 3 steps
-- **[D1_SETUP_GUIDE.md](./D1_SETUP_GUIDE.md)** - Complete D1 + Drizzle setup with API key
 
 ```bash
 # 1. Install dependencies
 npm install
 
-# 2. Configure your .env (see QUICK_START.md)
-# 3. Test connection
-npm run db:test
+# 2. Set up environment variables in .env:
+CLOUDFLARE_API_TOKEN=your_api_token
+CLOUDFLARE_ACCOUNT_ID=your_account_id  
+CLOUDFLARE_DATABASE_ID=your_database_id
 
-# 4. Start developing
+# 3. Set up local development database
+npm run db:setup
+
+# 4. Start local development server
 npm run dev
 ```
 
-## Overview
+Your API will be available at `http://localhost:8787` with a local database containing production data.
 
-The Toast App allows users to send "toasts" to each other - a simple social interaction system. This backend provides user management and toast functionality.
+## 🔄 Development Workflow
+
+### Local Development
+```bash
+npm run dev              # Start dev server with local database
+# Make your changes and test on http://localhost:8787
+```
+
+### Database Management
+```bash
+npm run db:setup         # Set up local database (run once)
+npm run db:sync          # Re-sync local data from production
+npm run db:test          # Test remote database connection
+```
+
+### Production Deployment
+```bash
+npm run deploy           # Deploy to production
+```
+
+### Code Quality
+```bash
+npm run check:fix        # Auto-fix linting issues
+```
 
 ## Tech Stack
 
 - **Runtime**: Cloudflare Workers
-- **Framework**: Hono
-- **Database**: Cloudflare D1 (SQLite)
+- **Framework**: Hono  
+- **Database**: Cloudflare D1 (local for dev, remote for production)
 - **ORM**: Drizzle ORM
 - **Language**: TypeScript
 
-## Project Structure
-
-```
-src/
-├── index.ts          # Main application entry point
-├── db/               # Database configuration and schema
-│   ├── index.ts      # Database connection
-│   ├── remote.ts     # Remote database connection
-│   └── schema.ts     # Database schema definitions
-├── routes/           # Route modules
-│   ├── users.ts      # User management endpoints
-│   └── toasts.ts     # Toast management endpoints
-├── scripts/          # Database maintenance scripts
-│   ├── seed.sql      # Sample data for development
-│   ├── clear.sql     # Clear all data
-│   └── README.md     # Scripts documentation
-└── types/
-    └── env.ts        # Environment type definitions
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18+)
-- npm or yarn
-- Cloudflare account (for deployment)
-
-### Installation
-
-```bash
-npm install
-```
-
-### Local Development
-
-1. **Run migrations:**
-   ```bash
-   npm run db:migrate
-   ```
-
-2. **Seed the database (optional):**
-   ```bash
-   npm run db:seed
-   ```
-
-3. **Start development server:**
-   ```bash
-   npm run dev
-   ```
-
-The API will be available at `http://localhost:8787`
-
-### Database Management
-
-| Command | Description |
-|---------|-------------|
-| `npm run db:test` | Test remote D1 connection |
-| `npm run db:generate` | Generate new migrations |
-| `npm run db:migrate` | Apply migrations (local) |
-| `npm run db:migrate:prod` | Apply migrations (production) |
-| `npm run db:seed` | Seed database with sample data |
-| `npm run db:clear` | Clear all data |
-| `npm run db:studio` | Open Drizzle Studio (connects to remote) |
-
 ## API Endpoints
-
-### Root
-- `GET /` - API documentation
 
 ### Users
 - `GET /users` - Get all users
 - `POST /users/register` - Register new user
-- `POST /users/profile` - Get user profile
+- `POST /users/profile` - Get user profile  
 - `PUT /users/profile` - Update user profile
 
 ### Toasts
@@ -115,52 +70,58 @@ The API will be available at `http://localhost:8787`
 - `POST /toasts/find-users` - Search users
 
 ### Health
+- `GET /` - API info and available endpoints
 - `GET /health` - Health check
 
-For detailed API documentation, see [API_DOCS.md](./API_DOCS.md).
+## 🛡️ Security & Safety
 
-## Deployment
+### Database Protection
+- **Local development**: Uses isolated local database copy
+- **Production access**: Requires explicit confirmation for destructive operations
+- **Data sync**: `npm run db:setup` copies production data to local safely
 
-### Production Deployment
-
+### Safe Operations
 ```bash
-npm run deploy
+npm run db:clear -- --confirm    # Clear production (requires confirmation)
+npm run db:sync                  # Safe: only reads from production
+npm run dev                      # Safe: uses local database only
 ```
 
-### Environment Configuration
+## Environment Setup
 
-The app uses Cloudflare D1 bindings. Make sure your `wrangler.toml` is configured correctly:
+Create a `.env` file with your Cloudflare credentials:
 
-```toml
-[env.production.d1_databases]
-binding = "DB"
-database_name = "toast-app-db"
-database_id = "your-database-id"
+```env
+CLOUDFLARE_API_TOKEN=your_api_token_here
+CLOUDFLARE_ACCOUNT_ID=your_account_id_here  
+CLOUDFLARE_DATABASE_ID=your_database_id_here
 ```
 
-## Development Notes
+**Getting your credentials:**
+1. **Account ID**: Go to Cloudflare dashboard, copy from right sidebar
+2. **API Token**: Profile → API Tokens → Create Token → Custom Token with D1:Edit permission  
+3. **Database ID**: Create D1 database with `wrangler d1 create toast-app-db`
 
-- **Local Development**: Uses local D1 database (SQLite file)
-- **Remote Development**: `npm run dev:remote` (connects to production D1)
-- **Database Access**: Two methods available:
-  - **Worker Binding** (runtime): Uses `env.DB` - recommended for Worker code
-  - **API Key** (external): Uses HTTP API - for scripts, Drizzle Studio, migrations
-- **See [D1_SETUP_GUIDE.md](./D1_SETUP_GUIDE.md)** for complete setup instructions
+## Project Structure
 
-## Scripts
+```
+src/
+├── index.ts          # Main application & routes
+├── db/               # Database setup
+│   ├── index.ts      # Worker DB connection  
+│   ├── remote.ts     # API-based connection
+│   └── schema.ts     # Database schema
+├── routes/           # API route handlers
+│   ├── users.ts      # User endpoints
+│   └── toasts.ts     # Toast endpoints  
+├── scripts/          # Database utilities
+└── types/            # TypeScript definitions
+```
 
-- `npm run dev` - Start local development server
-- `npm run dev:remote` - Start with remote D1 database
-- `npm run deploy` - Deploy to Cloudflare Workers
-- `npm run cf-typegen` - Generate Cloudflare bindings types
+## 💡 How It Works
 
-## Contributing
-
-1. Follow the existing code structure
-2. Use TypeScript strict mode
-3. Run migrations before testing changes
-4. Update API documentation when adding endpoints
-
-## License
-
-[Add your license here]
+- **Local Development**: Uses a local SQLite database that mirrors production
+- **Production**: Uses remote Cloudflare D1 database
+- **Data Sync**: Local database gets a copy of production data for realistic testing
+- **Safe Testing**: Changes made locally don't affect production database
+- **Simple Deployment**: Deploy when ready to push changes to production
