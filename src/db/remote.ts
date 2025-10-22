@@ -1,4 +1,5 @@
 // Remote database connection using Cloudflare D1 HTTP API
+import * as schema from "./schema";
 
 interface D1Response {
   success: boolean;
@@ -18,15 +19,52 @@ interface D1Response {
   messages: string[];
 }
 
-export async function queryRemoteDB(
-  sql: string,
+/**
+ * Create a remote D1 database connection helper
+ * This provides typed access to your D1 database via the REST API
+ * 
+ * @example
+ * ```ts
+ * const db = createRemoteDB(
+ *   process.env.CLOUDFLARE_API_TOKEN!,
+ *   process.env.CLOUDFLARE_ACCOUNT_ID!,
+ *   process.env.CLOUDFLARE_DATABASE_ID!
+ * );
+ * 
+ * const users = await db.query("SELECT * FROM users");
+ * ```
+ */
+export function createRemoteDB(
   apiToken: string,
   accountId: string,
   databaseId: string
 ) {
+  return {
+    async query<T = Record<string, unknown>>(sql: string, params: unknown[] = []): Promise<T[]> {
+      return queryRemoteDB(sql, apiToken, accountId, databaseId, params) as Promise<T[]>;
+    },
+    // You can add typed methods here based on your schema
+    schema,
+  };
+}
+
+/**
+ * Execute raw SQL queries against remote D1 database
+ * Supports parameterized queries for security
+ */
+export async function queryRemoteDB(
+  sql: string,
+  apiToken: string,
+  accountId: string,
+  databaseId: string,
+  params: unknown[] = []
+) {
   try {
     const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${databaseId}/query`;
-    const payload = { sql };
+    const payload = {
+      sql,
+      ...(params.length > 0 && { params })
+    };
 
     console.log(`Making request to: ${url}`);
     console.log(`Payload:`, JSON.stringify(payload));
@@ -69,3 +107,7 @@ export async function queryRemoteDB(
     throw error;
   }
 }
+
+export type RemoteDB = ReturnType<typeof createRemoteDB>;
+
+

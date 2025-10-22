@@ -8,10 +8,12 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply toast --local",
-    "db:migrate:prod": "wrangler d1 migrations apply toast",
+    "db:migrate:prod": "wrangler d1 migrations apply toast --remote",
+    "db:migrate:remote": "tsx src/scripts/apply-migrations-remote.ts",
     "db:studio": "drizzle-kit studio",
     "db:seed": "wrangler d1 execute toast --local --file=src/scripts/seed.sql",
     "db:clear": "wrangler d1 execute toast --local --file=src/scripts/clear.sql",
+    "db:test": "tsx src/scripts/test-remote-connection.ts",
     "check": "biome check .",
     "check:fix": "biome check . --write",
     "lint": "biome lint .",
@@ -28,6 +30,8 @@
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "@types/node": "^24.8.1",
-    "wrangler": "^4.4.0"
+    "dotenv": "^17.2.3",
+    "tsx": "^4.20.6",
+    "wrangler": "^4.44.0"
   }
 }

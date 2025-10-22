@@ -2,6 +2,24 @@
 
 A Cloudflare Workers-based backend API for the Toast App, built with Hono framework and D1 database.
 
+## 🚀 Quick Start
+
+**New to D1 setup?** Check out:
+- **[QUICK_START.md](./QUICK_START.md)** - Get up and running in 3 steps
+- **[D1_SETUP_GUIDE.md](./D1_SETUP_GUIDE.md)** - Complete D1 + Drizzle setup with API key
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Configure your .env (see QUICK_START.md)
+# 3. Test connection
+npm run db:test
+
+# 4. Start developing
+npm run dev
+```
+
 ## Overview
 
 The Toast App allows users to send "toasts" to each other - a simple social interaction system. This backend provides user management and toast functionality.
@@ -71,12 +89,13 @@ The API will be available at `http://localhost:8787`
 
 | Command | Description |
 |---------|-------------|
+| `npm run db:test` | Test remote D1 connection |
 | `npm run db:generate` | Generate new migrations |
 | `npm run db:migrate` | Apply migrations (local) |
 | `npm run db:migrate:prod` | Apply migrations (production) |
 | `npm run db:seed` | Seed database with sample data |
 | `npm run db:clear` | Clear all data |
-| `npm run db:studio` | Open Drizzle Studio |
+| `npm run db:studio` | Open Drizzle Studio (connects to remote) |
 
 ## API Endpoints
 
@@ -122,8 +141,11 @@ database_id = "your-database-id"
 ## Development Notes
 
 - **Local Development**: Uses local D1 database (SQLite file)
-- **Remote Development**: `npm run dev:remote` (requires authentication)
-- **Database**: Currently optimized for local development due to Cloudflare auth issues
+- **Remote Development**: `npm run dev:remote` (connects to production D1)
+- **Database Access**: Two methods available:
+  - **Worker Binding** (runtime): Uses `env.DB` - recommended for Worker code
+  - **API Key** (external): Uses HTTP API - for scripts, Drizzle Studio, migrations
+- **See [D1_SETUP_GUIDE.md](./D1_SETUP_GUIDE.md)** for complete setup instructions
 
 ## Scripts
 
