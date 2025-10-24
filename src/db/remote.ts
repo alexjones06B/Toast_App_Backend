@@ -62,9 +62,14 @@ export async function queryRemoteDB(
       ...(params.length > 0 && { params }),
     };
 
-    console.log(`Making request to: ${url}`);
-    console.log(`Payload:`, JSON.stringify(payload));
-    console.log(`Token prefix: ${apiToken.substring(0, 10)}...`);
+    // Only show debug info if DEBUG environment variable is set
+    const isDebug = process.env.DEBUG === "true";
+
+    if (isDebug) {
+      console.log(`Making request to: ${url}`);
+      console.log(`Payload:`, JSON.stringify(payload));
+      console.log(`Token prefix: ${apiToken.substring(0, 10)}...`);
+    }
 
     const response = await fetch(url, {
       method: "POST",
@@ -75,11 +80,16 @@ export async function queryRemoteDB(
       body: JSON.stringify(payload),
     });
 
-    console.log(`Response status: ${response.status}`);
-    console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
+    if (isDebug) {
+      console.log(`Response status: ${response.status}`);
+      console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
+    }
 
     const responseText = await response.text();
-    console.log(`Response body:`, responseText);
+
+    if (isDebug) {
+      console.log(`Response body:`, responseText);
+    }
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}, body: ${responseText}`);
@@ -93,7 +103,9 @@ export async function queryRemoteDB(
     }
 
     if (!data.result || data.result.length === 0) {
-      console.log("No results returned");
+      if (isDebug) {
+        console.log("No results returned");
+      }
       return [];
     }
 

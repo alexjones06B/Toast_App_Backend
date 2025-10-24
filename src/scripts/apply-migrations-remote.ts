@@ -17,7 +17,7 @@ import { createRemoteDB } from "../db/remote";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // Load environment variables
-config({ path: resolve(process.cwd(), ".env") });
+config({ path: resolve(process.cwd(), ".env"), quiet: true });
 
 async function applyMigrations() {
   console.log("🔄 Applying migrations to remote D1 database...\n");
