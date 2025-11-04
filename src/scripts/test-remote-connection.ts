@@ -26,7 +26,7 @@ import { createRemoteDB } from "../db/remote";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // Load environment variables from project root
-config({ path: resolve(process.cwd(), ".env") });
+config({ path: resolve(process.cwd(), ".env"), quiet: true });
 
 async function testConnection() {
   console.log("🔄 Testing remote D1 database connection...\n");

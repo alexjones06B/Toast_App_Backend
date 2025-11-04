@@ -9,8 +9,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "toast",
-      "database_id": "8cbde640-7a43-4760-9c14-dd3145c402c1"
+      "database_name": "toast-app-db",
+      "database_id": "8aaadd65-d03c-4cff-b3ad-e9c90da11f88"
     }
   ]
 }
